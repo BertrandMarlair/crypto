@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { find, map, pick, tap } from 'lodash/fp';
-
-import InformationPane from '../components/information_pane';
-import About from '../components/about';
+import Divider from '@material-ui/core/Divider';
 
 const styles = theme => ({
     root: {
@@ -17,45 +15,24 @@ const styles = theme => ({
 });
 
 class Widget extends Component {
-    selectNodeHandler(id) {
-        if (!id || (this.state.selectedNode && id === this.state.selectedNode.id)) {
-          this.setState({ selectedNode: null });
-        } else {
-          const selectedNode = find(node => node.id === id, this.state.data.nodes);
-    
-          this.setState({ selectedNode });
-        }
-    }
-    
-    createSearchOptions() {
-        const extractOptions = map(pick(['id', 'label']));
-        return this.state.data ? extractOptions(this.state.data.nodes) : [];
-    }
-
     render() {
         const { classes } = this.props; 
-        const searchOptions = this.createSearchOptions();
-
         return (
             <React.Fragment>
-                <Grid container direction="column" justify="center">
-                    {this.state.selectedNode ?
-                        <div className="information_pane">
-                            {' '}
-                            <InformationPane
-                                node={this.state.selectedNode}
-                                onClose={() => this.selectNodeHandler(null)}
-                                onSelect={id => this.selectNodeHandler(id)}
-                            />
-                            {' '}
-                        </div>
-                    :
-                        <About
-                            searchOptions={searchOptions}
-                            onSelection={id => this.selectNodeHandler(id)}
-                        />
-                    }
-                </Grid>
+                <Paper className={classes.root} elevation={1}>
+                    <Typography variant="h3">
+                        Cryptospace.be - The State of the Belgian Blockchain ecosystem
+                    </Typography>
+                    <Typography variant="h6">
+                        Aims to support greater publicity around Blockchain projects in the Plat Pays, fostering entrepreneurship and connections between individuals and ventures. Based on publicly available data.
+                        If you want to have your project listed, to correct some data (which might be outdated), or simply contribute, click here.
+                        Click on a node or search to get more information.
+                    </Typography>
+                    <Divider/>
+                    <Typography variant="headline">
+                        Maintained by Thomas Vanderstraeten from Cryptizens.io, developed with Guillaume Vankeerberghen, with friendly input from folks at Hive, Hey, The BAB, TheLedger, KeyRock, and others. Thanks to all
+                    </Typography>
+                </Paper>
             </React.Fragment>
         );
     }
